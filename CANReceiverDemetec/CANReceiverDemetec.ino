@@ -12,9 +12,7 @@
 #define tip3 32
 // ----------------------------------
 //-------Duty Cycle-------
-
 int dutyCycle = 50*(0.80);
-
 
 // ----- ENUMS -----
 enum packetIterator {
