@@ -7,12 +7,13 @@
 // -----------------------------------------
 
 // ----- DEFINE PINOS DOS BICOS -----
-#define tip1 27
 #define tip2 25
 #define tip3 32
 // ----------------------------------
 //-------Duty Cycle-------
-int dutyCycle = 50*(0.80);
+int valor_desejado = 50; // Valor desejado para o duty cycle
+
+int dutyCycle = valor_desejado*(0.80); // Valor desejado para o duty cycle
 
 // ----- ENUMS -----
 enum packetIterator {
@@ -44,9 +45,12 @@ void setup() {
 
   // Configuração dos pinos para gerar PWM
   ledcSetup(0, 8, 8); // Configura o canal 0 com resolução de 8 bits
-  ledcAttachPin(tip1, 0); // Atribui o canal 0 ao pino tip1
+  //ledcAttachPin(tip1, 0); // Atribui o canal 0 ao pino tip1
   ledcAttachPin(tip2, 1); // Atribui o canal 1 ao pino tip2
   ledcAttachPin(tip3, 2); // Atribui o canal 2 ao pino tip3
+
+  ledcWrite(1, 1);
+  ledcWrite(2, 1);
 
   // Imprime dados de identificação do módulo
   Serial.println("*** Receptor CAN ***");
@@ -78,13 +82,13 @@ void loop() {
 void tipsControl(uint8_t *packet) {
   if (packet[pNODE] == NODE && packet[pSECTION] == SECTION) {
     // Controle bico 1
-    if (packet[TIP_ONE] == CLOSED) {
-      Serial.println("Bico 1 recebeu o comando para ser fechado. Fechando bico 1...");
-      ledcWrite(0, dutyCycle); // Define o duty cycle como 100% (totalmente fechado)
-    } else {
-      Serial.println("Bico 1 recebeu o comando para ser aberto. Abrindo bico 1...");
-      ledcWrite(0, 0); // Define o duty cycle como 0% (totalmente aberto)
-    }
+    //if (packet[TIP_ONE] == CLOSED) {
+    //  Serial.println("Bico 1 recebeu o comando para ser fechado. Fechando bico 1...");
+    //  ledcWrite(0, dutyCycle); // Define o duty cycle como 100% (totalmente fechado)
+   // } else {
+   //   Serial.println("Bico 1 recebeu o comando para ser aberto. Abrindo bico 1...");
+   //   ledcWrite(0, 0); // Define o duty cycle como 0% (totalmente aberto)
+   // }
 
     // Controle bico 2
     if (packet[TIP_TWO] == CLOSED) {
@@ -92,13 +96,13 @@ void tipsControl(uint8_t *packet) {
       ledcWrite(1, dutyCycle); // Define o duty cycle como 100% (totalmente fechado)
     } else {
       Serial.println("Bico 2 recebeu o comando para ser aberto. Abrindo bico 2...");
-      ledcWrite(1, 0); // Define o duty cycle como 0% (totalmente aberto)
+      ledcWrite(1, 1); // Define o duty cycle como 0% (totalmente aberto)
     }
 
     // Controle bico 3
     if (packet[TIP_THREE] == CLOSED) {
       Serial.println("Bico 3 recebeu o comando para ser fechado. Fechando bico 3...");
-      ledcWrite(2, dutyCycle); // Define o duty cycle como 100% (totalmente fechado)
+      ledcWrite(2, 1); // Define o duty cycle como 100% (totalmente fechado)
     } else {
       Serial.println("Bico 3 recebeu o comando para ser aberto. Abrindo bico 3...");
       ledcWrite(2, dutyCycle); // Define o duty cycle como 0% (totalmente aberto)
